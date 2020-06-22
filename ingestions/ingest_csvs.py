@@ -3,8 +3,8 @@
 """
 @author Christopher Wingard
 @brief Reworks the original datateam_ingest code in the datateam_tools 
-	repository to initiate ingest requests from the command line rather than
-	from a propmt and response style of request.
+    repository to initiate ingest requests from the command line rather than
+    from a propmt and response style of request.
 """
 import argparse
 import netrc
@@ -32,14 +32,14 @@ API_KEY, USERNAME, API_TOKEN = credentials.authenticators('ooinet.oceanobservato
 
 
 def load_ingest_sheet(ingest_csv, ingest_type):
-	"""
-	Loads the CSV ingest sheet and sets the ingest type used in subsequent steps
-	
-	:param ingest_csv: path and file name of the ingest CSV file to use
-	:param ingest_type: ingestion type, telemetered (recurring) or recovered 
-		(once only)
-	:return df: pandas data frame with ingestion parameters
-	"""
+    """
+    Loads the CSV ingest sheet and sets the ingest type used in subsequent steps
+    
+    :param ingest_csv: path and file name of the ingest CSV file to use
+    :param ingest_type: ingestion type, telemetered (recurring) or recovered 
+        (once only)
+    :return df: pandas data frame with ingestion parameters
+    """
     df = pd.read_csv(ingest_csv, usecols=[0, 1, 2, 3])
     df['username'] = USERNAME
     df['deployment'] = get_deployment_number(df.filename_mask.values)
@@ -54,14 +54,14 @@ def load_ingest_sheet(ingest_csv, ingest_type):
 
 
 def get_deployment_number(filename_mask):
-	"""
-	Pulls the deployment number out of the filename_mask field in the ingest 
-	CSV file.
-	
-	:param filename_mask: filename mask, or regex, in the ingest CSV file that 
-		includes the deployment number.
-	:return deployment_number: the deployment number as an integer
-	"""
+    """
+    Pulls the deployment number out of the filename_mask field in the ingest 
+    CSV file.
+    
+    :param filename_mask: filename mask, or regex, in the ingest CSV file that 
+        includes the deployment number.
+    :return deployment_number: the deployment number as an integer
+    """
     deployment_number = []
     for fm in filename_mask:
         split_fm = fm.split('/')
@@ -71,14 +71,14 @@ def get_deployment_number(filename_mask):
 
 
 def build_ingest_dict(ingest_info):
-	"""
-	Converts the pandas dataframe information into the dictionary structure
-	needed for the ingest request.
-	
-	:param ingest_info: information from the pandas dataframe to use in forming
-		the ingest dictionary
-	:return request_dict: ingest information structured as a dictionary
-	"""
+    """
+    Converts the pandas dataframe information into the dictionary structure
+    needed for the ingest request.
+    
+    :param ingest_info: information from the pandas dataframe to use in forming
+        the ingest dictionary
+    :return request_dict: ingest information structured as a dictionary
+    """
     option_dict = {}
     keys = list(ingest_info.keys())
 
@@ -101,15 +101,15 @@ def build_ingest_dict(ingest_info):
 
 
 def ingest_data(url, key, token, data_dict):
-	"""
-	Post the ingest request to the OOI M2M api.
-	
-	:param url: Data ingest request URL for the M2M API
-	:param key: Ingest users API key (from OOINet)
-	:param token: Ingest users API token (from OOINet)
-	:param data_dict: JSON formatted body of the POST request
-	:return r: results of the request
-	"""
+    """
+    Post the ingest request to the OOI M2M api.
+    
+    :param url: Data ingest request URL for the M2M API
+    :param key: Ingest users API key (from OOINet)
+    :param token: Ingest users API token (from OOINet)
+    :param data_dict: JSON formatted body of the POST request
+    :return r: results of the request
+    """
     r = requests.post('{}/api/m2m/12589/ingestrequest/'.format(url), json=data_dict, headers=HEADERS, auth=(key, token))
     if r.ok:
         return r
@@ -118,16 +118,16 @@ def ingest_data(url, key, token, data_dict):
 
 
 def main(argv=None):
-	"""
-	Reads data from a CSV formatted file using the ingestion CSV structure to 
-	create and POST an ingest request to the OOI M2M API.
-	
-	:param csvfile: CSV file with ingestion information
-	:param ingest_type: specifies either a telemetered (recurring) or recovered
-		(once only) ingest request type.
-	:return: None, though results are saved as a CSV file in the directory the
-		command is called from.
-	"""
+    """
+    Reads data from a CSV formatted file using the ingestion CSV structure to 
+    create and POST an ingest request to the OOI M2M API.
+    
+    :param csvfile: CSV file with ingestion information
+    :param ingest_type: specifies either a telemetered (recurring) or recovered
+        (once only) ingest request type.
+    :return: None, though results are saved as a CSV file in the directory the
+        command is called from.
+    """
     if argv is None:
         argv = sys.argv[1:]
 
