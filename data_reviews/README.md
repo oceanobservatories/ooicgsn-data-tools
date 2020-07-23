@@ -21,8 +21,8 @@ Only developed and tested with Matlab 2020a. Not sure how it will do with
 earlier versions.
  
 To request data via the M2M system, you will need to have the python code
-available in the [ooi-data-explorations]() repository installed on your system
-per the directions in the [README](). Then you need to "register" it with Matlab
+available in the [ooi-data-explorations](https://github.com/oceanobservatories/ooi-data-explorations/tree/master/python) repository installed on your system
+per the directions in the [README](https://github.com/oceanobservatories/ooi-data-explorations/blob/master/python/README.md). Then you need to "register" it with Matlab
 so it knows to use that python environment. I use a `startup.m` file in my
 Matlab home directory with the following code:
 
