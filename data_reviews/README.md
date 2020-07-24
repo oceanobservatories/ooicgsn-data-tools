@@ -17,14 +17,16 @@ performance.
 
 ## Assumptions
 
-Only developed and tested with Matlab 2020a. Not sure how it will do with 
-earlier versions.
+Only developed and tested with Matlab 2019b and 2020a. Not sure how it will do 
+with earlier versions.
  
 To request data via the M2M system, you will need to have the python code
-available in the [ooi-data-explorations](https://github.com/oceanobservatories/ooi-data-explorations/tree/master/python) repository installed on your system
-per the directions in the [README](https://github.com/oceanobservatories/ooi-data-explorations/blob/master/python/README.md). Then you need to "register" it with Matlab
-so it knows to use that python environment. I use a `startup.m` file in my
-Matlab home directory with the following code:
+available in the [ooi-data-explorations](https://github.com/oceanobservatories/ooi-data-explorations/tree/master/python) 
+repository installed on your system per the directions in the 
+[README](https://github.com/oceanobservatories/ooi-data-explorations/blob/master/python/README.md). 
+Then you need to "register" it with Matlab so it knows to use that python 
+environment. I use a `startup.m` file in my Matlab home directory with the 
+following code:
 
 ``` matlab
 % startup.m
@@ -51,6 +53,6 @@ save('ooinet.credentials.mat', 'options');
 ```
 
 Put the `ooinet.credentials.mat` file in your Matlab path (best option is the
-Matlab home directory) and it will be available for use any time you want to 
-access the OOI M2M API without having to put your credentials actually into the
-code.
+Matlab home directory as it is on the Matlab path by default) and it will be 
+available for use any time you want to access the OOI M2M API. The code uses
+these credentials to get together the requests and the pull annotations.
