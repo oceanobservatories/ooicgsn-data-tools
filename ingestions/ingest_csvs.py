@@ -32,7 +32,7 @@ credentials = netrc.netrc()
 API_KEY, USERNAME, API_TOKEN = credentials.authenticators('ooinet.oceanobservatories.org')
 
 
-def load_ingest_sheet(ingest_csv, ingest_type):
+def load_ingest_sheet(ingest_csv, ingest_type, ingest_state):
     """
     Loads the CSV ingest sheet and sets the ingest type used in subsequent steps
     
@@ -44,7 +44,7 @@ def load_ingest_sheet(ingest_csv, ingest_type):
     df = pd.read_csv(ingest_csv, usecols=[0, 1, 2, 3])
     df['username'] = USERNAME
     df['deployment'] = get_deployment_number(df.filename_mask.values)
-    df['state'] = 'RUN'
+    df['state'] = ingest_state.upper()
     df['priority'] = PRIORITY
     df['type'] = ingest_type.upper()
 
@@ -134,15 +134,23 @@ def main(argv=None):
         argv = sys.argv[1:]
 
     # initialize argument parser
-    parser = argparse.ArgumentParser(description="""Sets the source file for the ingests and the type""")
+    parser = argparse.ArgumentParser(description="""Sets the source file for 
+                                                    the ingests, the type and 
+                                                    the state.""")
 
     # assign input arguments.
-    parser.add_argument("-c", "--csvfile", dest="csvfile", type=Path, required=True)
-    parser.add_argument("-t", "--ingest_type", dest="ingest_type", type=str, 
-                        choices=('recovered', 'telemetered', 'stage', 'mock'), 
-                        required=True)
-    parser.add_argument("-bd", "--begin_date", dest="begin_date", type=str)
-    parser.add_argument("-ed", "--end_date", dest="end_date", type=str)
+    parser.add_argument("-c", "--csvfile", dest="csvfile", type=Path,
+                        required=True, help="CSV file with ingest settings")
+    parser.add_argument("-t", "--ingest_type", dest="ingest_type", type=str,
+                        choices=('recovered', 'telemetered'), required=True,
+                        help="Ingest type, either recovered or telemetered")
+    parser.add_argument("-s", "--ingest_state", dest="ingest_state", type=str,
+                        choices=('run', 'stage', 'mock'), default='run',
+                        help="Ingest state, either run, stage or mock (default: run)")
+    parser.add_argument("-bd", "--begin_date", dest="begin_date", type=str,
+                        help="Date and/or time string to set the start time of the data")
+    parser.add_argument("-ed", "--end_date", dest="end_date", type=str,
+                        help="Date and/or time string to set the end time of the data")
 
     # parse the input arguments and create a parser object
     args = parser.parse_args(argv)
@@ -150,6 +158,7 @@ def main(argv=None):
     # assign the annotations type and csv file
     ingest_csv = args.csvfile
     ingest_type = args.ingest_type
+    ingest_state = args.ingest_state
     begin_date = args.begin_date
     end_date = args.end_date
 
@@ -158,7 +167,7 @@ def main(argv=None):
     ingest_df = pd.DataFrame()
 
     # load the csv file for the ingests
-    df = load_ingest_sheet(ingest_csv, ingest_type)
+    df = load_ingest_sheet(ingest_csv, ingest_type, ingest_state)
     df = df.sort_values(['deployment', 'reference_designator'])
     df = df.rename(columns={'filename_mask': 'fileMask', 'reference_designator': 'refDes',
                             'data_source': 'dataSource', 'parser': 'parserDriver'})
