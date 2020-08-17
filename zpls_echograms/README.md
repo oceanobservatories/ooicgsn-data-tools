@@ -1,34 +1,27 @@
 **ZPLSC/G Echogram Code & Instructions**  
-Author: J. Kuo, jkuo@whoi.edu
-8/14/2020
+Author: J. Kuo, jkuo@whoi.edu  
+8/14/2020  
 
-*Note:* The preset colorbar ranges are the same for every array. Feel free to change it in the code.
+*Note:* The preset colorbar ranges are the same for every array. Feel free to change it in the code.  
 
-**Optional flags:**  
+| **Optional flags:** |  |  
+| ------------------------ |----------------------------------- |
+| -tc, --tilt_correction   | Apply tilt correction in degree(s) |  
+| -ss, --subsite           | The subsite where the ZPLSC/G is located. Ex: "CP03ISSM", "GI02HYPM_Upper", or "GP02HYPM_Lower" |  
+| -dn, --deployment_number | Deployment number |  
+| -dd, --deployed_depth    | The depth where the ZPLSC/G is located at |  
+| -cr, --colorbar_range    | Set colorbar range. Useage: "min max" |  
 
--tc     --tilt_correction                Apply tilt correction in degree(s)
-
--ss     --subsite                          The subsite where the ZPLSC/G is located. Ex: "CP03ISSM", "GI02HYPM_Upper", or "GP02HYPM_Lower"
-
--dn    --deployment_number      Deployment number
-
--dd    --deployed_depth             The depth where the ZPLSC/G is located at
-
--cr    --colorbar_range                Set colorbar range. Useage: "min max"
-
-**Required Input:**  
-
-data_directory                              The path to /DATA directory, where the .01A files are stored
-
-xml_file                                        The path to .xml file
-
-dates                                            The date range to be plotted.  
-                                                    Ex: "20200118" will plot the day (01/18/2020),  
-                                                        "202001" will plot the whole month (01/01/2020 to 01/31/2020),  
-                                                        "202001 202002" will plot (01/01/2020 to 02/29/2020),  
-                                                        "20200115 20200216" will plot (01/15/2020 to 02/16/2020)
-                                                        
-output_dir                                    The path where .nc file and .png plot is being saved
+| **Required Input:** |  |  
+| ------------------- |----------------------------------- |
+| data_directory      | The path to /DATA directory, where the .01A files are stored |  
+| xml_file            | The path to .xml file |  
+| dates               | The date range to be plotted. E.g.: |  
+|                     | "20200118" will plot the day (01/18/2020), |  
+|                     | "202001" will plot the whole month (01/01/2020 to 01/31/2020), |  
+|                     | "202001 202002" will plot (01/01/2020 to 02/29/2020), |  
+|                     | "20200115 20200216" will plot (01/15/2020 to 02/16/2020) |  
+| output_dir          | The path where .nc file and .png plot is being saved |  
 
 **Usage:**  
 ```python3    zpls_echogram.py    [data_directory]    [xml_file]    [dates]    [output_dir]```
