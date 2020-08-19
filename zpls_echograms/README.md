@@ -86,7 +86,7 @@ The code will create ./processed_folder/**SN55067-20161101-20161130.nc** and ./p
 The code will create ./processed_folder/**GI02HYPM_Upper_SN55067-20161101-20161130.nc** and ./processed_folder/**GI02HYPM_Upper_SN55067-20161101-20161130.png**
 
 **Example 8:**
-```python3    zpls_echogram.py    ./GI/ZPLSG_sn55067/DATA    ./GI/ZPLSG_sn55067/DATA/201610/16101417.XML    201611    ./processed_folder    **-ss    GI02HYPM_Upper    -dn    4**```
+```python3    zpls_echogram.py    ./GI/ZPLSG_sn55067/DATA    ./GI/ZPLSG_sn55067/DATA/201610/16101417.XML    201611    ./processed_folder    -ss    GI02HYPM_Upper    -dn    4```
 
 The code will create ./processed_folder/**GI02HYPM_Upper_R4_SN55067-20161101-20161130.nc** and ./processed_folder/**GI02HYPM_Upper_R4_SN55067-20161101-20161130.png**
 
