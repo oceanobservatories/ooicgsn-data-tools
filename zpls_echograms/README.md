@@ -7,7 +7,7 @@ Author: J. Kuo, jkuo@whoi.edu; S. Petillo, spetillo@whoi.edu
 https://www.anaconda.com/products/individual  
 https://docs.conda.io/en/latest/miniconda.html  
 
-2. Create the conda environment, then install the conda environment to run with this code and it's echopype dependency (instead of using pip)  
+2. Create the conda environment, then install the conda environment to run with this code and its echopype dependency (instead of using pip)  
 https://echopype.readthedocs.io/en/latest/usage.html#installation
 
 3. Activate the Conda environment  
