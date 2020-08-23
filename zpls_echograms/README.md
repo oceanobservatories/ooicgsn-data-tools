@@ -1,8 +1,20 @@
 **ZPLSC/G Echogram Code & Instructions**  
-Author: J. Kuo, jkuo@whoi.edu  
-8/14/2020  
+Author: J. Kuo, jkuo@whoi.edu; S. Petillo, spetillo@whoi.edu  
+8/19/2020  
 
-*Note:* The preset colorbar ranges are the same for every array. Feel free to change it in the code.  
+**Setup:**  
+1. Install Anaconda or Miniconda to manage Python-related packages and package versions  
+https://www.anaconda.com/products/individual  
+https://docs.conda.io/en/latest/miniconda.html  
+
+2. Create the conda environment, then install the conda environment to run with this code and its echopype dependency (instead of using pip)  
+https://echopype.readthedocs.io/en/latest/usage.html#installation
+
+3. Activate the Conda environment  
+```conda activate echopype```
+
+**Usage:**  
+```python3    zpls_echogram.py    [data_directory]    [xml_file]    [dates]    [output_dir]```
 
 | **Optional flags:** |  |  
 | ------------------------ |----------------------------------- |
@@ -23,8 +35,7 @@ Author: J. Kuo, jkuo@whoi.edu
 |                     | "20200115 20200216" will plot (01/15/2020 to 02/16/2020) |  
 | output_dir          | The path where .nc file and .png plot is being saved |  
 
-**Usage:**  
-```python3    zpls_echogram.py    [data_directory]    [xml_file]    [dates]    [output_dir]```
+**Note:** The preset colorbar ranges are the same for every array. Feel free to change it in the code.  
 
 **ZPLS raw data folder structure (This is how the instrument stores the data):**  
 ```
