@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import argparse
+import cmocean
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -13,6 +14,26 @@ from pandas.plotting import register_matplotlib_converters
 
 register_matplotlib_converters()
 subsite_config = {
+    'CE01ISSM': {
+        'tilt_correction': 15,
+        'colorbar_range': [-80, -20],
+        'deployed_depth': 25
+    },
+    'CE06ISSM': {
+        'tilt_correction': 15,
+        'colorbar_range': [-80, -20],
+        'deployed_depth': 29
+    },
+    'CE07SHSM': {
+        'tilt_correction': 15,
+        'colorbar_range': [-80, -20],
+        'deployed_depth': 87
+    },
+    'CE09OSSM': {
+        'tilt_correction': 15,
+        'colorbar_range': [-80, -20],
+        'deployed_depth': 542
+    },
     'CP04OSSM': {
         'tilt_correction': 15,
         'colorbar_range': [-150, 0],
@@ -60,7 +81,7 @@ def set_file_name(serial_number, dates, subsite, deployment_number):
     :param deployment_number:
     :return:
     """
-    serial_number = 'SN'+str(serial_number)+'_'
+    serial_number = 'SN' + str(serial_number) + '_'
     if subsite is None:
         subsite = ''
     else:
@@ -69,7 +90,7 @@ def set_file_name(serial_number, dates, subsite, deployment_number):
         deployment_number = ''
     else:
         deployment_number = 'R' + deployment_number + '_'
-    file_name = subsite + deployment_number + serial_number + dates[0] + '-' + dates[1]
+    file_name = subsite + deployment_number + serial_number + dates[0]
     return file_name
 
 
@@ -83,55 +104,66 @@ def ax_config(ax, frequency, y_min, y_max):
     :param y_max:
     :return:
     """
-    font_size_small = 14
-    font_size_large = 18
-
-    title = 'Volume Backscatter (Sv): Frequency: %.0f kHz' % (frequency / 1000)
-    ax.set_title(title, fontsize=font_size_large)
+    title = '%.0f kHz' % (frequency / 1000)
+    ax.set_title(title)
     ax.grid(False)
 
-    ax.set_ylabel('depth (m)', fontsize=font_size_small)
+    ax.set_ylabel('depth (m)')
     ax.set_ylim([y_min, y_max])
     ax.invert_yaxis()
-
-    ax.tick_params(axis="both", labelcolor="k", pad=4, direction='out', length=5, width=2)
-
-    ax.spines['top'].set_visible(True)
-    ax.spines['right'].set_visible(True)
-    ax.spines['bottom'].set_visible(True)
-    ax.spines['left'].set_visible(True)
+    ax.set_xlabel('')
 
 
-def generate_echogram(data, output_dir, file_name, v_min=None, v_max=None):
+def generate_echogram(data, subsite, deployment_number, output_dir, file_name, v_min=None, v_max=None):
     """
     TODO: Add function description and variable definitions
 
     :param data:
+    :param subsite:
+    :param deployment_number:
     :param output_dir:
     :param file_name:
     :param v_min:
     :param v_max:
     :return:
     """
-    interplot_spacing = 0.1
     frequency_list = data.frequency.values
+    t = data.ping_time.values[0]
+    start_date = date.strftime(t.astype('M8[D]').astype('O'), '%Y-%m-%d')
     y_min = 0
-    y_max = np.amax(data.depth)
+    y_max = np.amax(data.depth.values)
 
+    params = {
+        'font.size': 12,
+        'axes.linewidth': 1.0,
+        'figure.figsize': [17, 11],
+        'xtick.major.size': 4,
+        'xtick.major.pad': 4,
+        'xtick.major.width': 1.0,
+        'ytick.major.size': 4,
+        'ytick.major.pad': 4,
+        'ytick.major.width': 1.0
+    }
+    plt.rcParams.update(params)
     fig, ax = plt.subplots(nrows=len(frequency_list), sharex='all', sharey='all')
-    fig.subplots_adjust(hspace=interplot_spacing)
-    fig.set_size_inches(40, 19)
+    ht = fig.suptitle('Volume Acoustic Backscatter (Sv): {}-{}, {} UTC'.format(subsite, deployment_number, start_date))
+    ht.set_position([0.5, 0.925])
+    my_cmap = cmocean.cm.rain
 
     for index in range(len(frequency_list)):
-        data.isel(frequency=index).swap_dims({'range_bin': 'depth'}).Sv.plot(x='ping_time', y='depth', vmin=v_min,
-                                                                             vmax=v_max, ax=ax[index])
+        im = data.isel(frequency=index).Sv.plot(x='ping_time', y='depth', vmin=v_min, vmax=v_max, ax=ax[index],
+                                                cmap=my_cmap, add_colorbar=False)
         ax_config(ax[index], frequency_list[index], y_min, y_max)
 
-    fig.tight_layout(rect=[0, 0.0, 0.97, 1.0])
-    echogram_name = file_name+'.png'
+    plt.xlabel('Date and Time (UTC)')
+    fig.subplots_adjust(right=0.89)
+    cbar = fig.add_axes([0.91, 0.30, 0.012, 0.40])
+    ch = fig.colorbar(im, cax=cbar, label='Sv (dB)')
+
+    echogram_name = file_name + '.png'
     # plt.cm.get_cmap(viridis)
     # sc = plot.scatter()
-    plt.savefig(os.path.join(output_dir, echogram_name))
+    plt.savefig(os.path.join(output_dir, echogram_name), bbox_inches='tight', dpi=150)
 
 
 def depth_correction(data, tilt_correction, deployed_depth, subsite):
@@ -243,21 +275,38 @@ def main(argv=None):
         v_min = None
         v_max = None
 
-    # convert the list of .01A files using echopype and save the output .nc file to output_dir
+    # convert the list of .01A files using echopype and save the output .zarr file to output_dir
     file_list = file_path_generator(data_directory, dates)
+    file_list = [file for file in file_list if os.path.isfile(file)]
     dc = Convert(file_list, xml_file)
-
+    dc.platform_name = subsite + '-' + deployment_number
+    dc.platform_type = 'surface mooring'
+    dc.platform_code_ICES = '3164'  # Platform code for Moorings
     serial_number = (dc.parameters['serial_number'])
     file_name = set_file_name(serial_number, dates, subsite, deployment_number)
+    dc.raw2zarr(combine_opt=True, save_path=os.path.join(output_dir, file_name + '.zarr'), overwrite=True)
 
-    dc.raw2nc(combine_opt=True, save_path=os.path.join(output_dir, file_name+'.nc'))
-    tmp_echo = Process(os.path.join(output_dir, file_name+'.nc'))
-    tmp_echo.calibrate(save=False)  # Sv data
+    # process the data, applying calibration coefficents and calculating the depth with a tilt correction
+    tmp_echo = Process(os.path.join(output_dir, file_name + '.zarr'))
+    tmp_echo.salinity = 33                                 # nominal salinity in PSU
+    tmp_echo.pressure = deployed_depth                     # nominal site depth in dbar
+    tmp_echo.recalculate_environment()                     # recalculate related parameters
+    tmp_echo.calibrate()                                   # calculate Sv
+    tmp_echo.remove_noise()                                # clean up the Sv
     depth = tmp_echo.calc_range(tilt_corrected=False)
-    data = tmp_echo.Sv.assign_coords(depth=depth)
-
+    data = tmp_echo.Sv_clean.assign_coords(depth=depth)
     depth_correction(data, tilt_correction, deployed_depth, subsite)
-    generate_echogram(data, output_dir, file_name, v_min, v_max)
+    generate_echogram(data, subsite, deployment_number, output_dir, file_name, v_min, v_max)
+
+    # # smooth the data and generate the echogram
+    # depth_bin = 0.25
+    # time_bin = 180
+    # range_bin = data.range.values[0, :]
+    # ndepth = np.round(depth_bin / np.mean(np.diff(range_bin))).astype(int)
+    # ping_time = data.ping_time.values.astype(float) * 1.0e-9
+    # ntime = np.round(time_bin / np.min(np.diff(ping_time))).astype(int)
+    # mvbs = data.coarsen(ping_time=ntime, range_bin=ndepth, boundary='trim', keep_attrs=True).mean()
+    # generate_echogram(mvbs, subsite, deployment_number, output_dir, file_name, v_min, v_max)
 
 
 if __name__ == '__main__':
