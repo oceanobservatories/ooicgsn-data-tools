@@ -22,93 +22,93 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 register_matplotlib_converters()
 site_config = {
     'CE01ISSM': {
-        'long_name': 'Oregon Inshore Surface Mooring',
+        'long_name': 'Coastal Endurance, Oregon Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 25],
         'deployed_depth': 25
     },
     'CE02SHBP': {
-        'long_name': 'Oregon Shelf Cabled Benthic Experiment Package',
+        'long_name': 'Coastal Endurance, Oregon Shelf Cabled Benthic Experiment Package',
         'tilt_correction': 0,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 80],
         'deployed_depth': 80
     },
     'CE04OSPS': {
-        'long_name': 'Oregon Offshore Cabled Shallow Profiler Mooring',
+        'long_name': 'Coastal Endurance, Oregon Offshore Cabled Shallow Profiler Mooring',
         'tilt_correction': 0,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 200],
         'deployed_depth': 200
     },
     'CE06ISSM': {
-        'long_name': 'Washington Inshore Surface Mooring',
+        'long_name': 'Coastal Endurance, Washington Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 30],
         'deployed_depth': 29
     },
     'CE07SHSM': {
-        'long_name': 'Washington Shelf Surface Mooring',
+        'long_name': 'Coastal Endurance, Washington Shelf Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 87],
         'deployed_depth': 87
     },
     'CE09OSSM': {
-        'long_name': 'Washington Offshore Surface Mooring',
+        'long_name': 'Coastal Endurance, Washington Offshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 540],
         'deployed_depth': 542
     },
     'CP04OSSM': {
-        'long_name': 'Offshore Surface Mooring',
+        'long_name': 'Coastal Pioneer, Offshore Surface Mooring',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
+        'colorbar_range': [-90, -50],
         'vertical_range': [0, 450],
         'deployed_depth': 450
     },
     'CP03ISSM': {
-        'long_name': 'Inshore Surface Mooring',
+        'long_name': 'Coastal Pioneer, Inshore Surface Mooring',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
+        'colorbar_range': [-90, -50],
         'vertical_range': [0, 90],
         'deployed_depth': 90
     },
     'CP01CNSM': {
-        'long_name': 'Central Surface Mooring',
+        'long_name': 'Coastal Pioneer, Central Surface Mooring',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
+        'colorbar_range': [-90, -50],
         'vertical_range': [0, 130],
         'deployed_depth': 130
     },
-    'GI02HYPM_Upper': {
-        'long_name': 'Apex Profiler Mooring, Upward Looking',
+    'GI02HYPM_UPPER': {
+        'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
+        'colorbar_range': [-95, -65],
         'vertical_range': [0, 150],
         'deployed_depth': 150
     },
-    'GI02HYPM_Lower': {
-        'long_name': 'Apex Profiler Mooring, Downward Looking',
+    'GI02HYPM_LOWER': {
+        'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
-        'vertical_range': [150, 300],
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 150],
         'deployed_depth': 150
     },
-    'GP02HYPM_Upper': {
-        'long_name': 'Apex Profiler Mooring, Upward Looking',
+    'GP02HYPM_UPPER': {
+        'long_name': 'Global Station Papa, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
+        'colorbar_range': [-95, -65],
         'vertical_range': [0, 150],
         'deployed_depth': 150},
-    'GP02HYPM_Lower': {
-        'long_name': 'Apex Profiler Mooring, Downward Looking',
+    'GP02HYPM_LOWER': {
+        'long_name': 'Global Station Papa, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
-        'colorbar_range': [-150, 0],
-        'vertical_range': [150, 300],
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 150],
         'deployed_depth': 150
     }
 }
@@ -179,14 +179,12 @@ def set_file_name(site, dates):
     return file_name
 
 
-def ax_config(ax, upward, frequency):
+def ax_config(ax, frequency):
     """
     Configure axis elements for the echogram, setting title, date formatting
     and direction of the y-axis
 
     :param ax: graphics handle to the axis object
-    :param upward: boolean flag to set whether this is an upward or downward
-        looking instrument, y-axis direction set accordingly
     :param frequency: acoustic frequency of the data plotted in this axis
     :return None:
     """
@@ -195,8 +193,6 @@ def ax_config(ax, upward, frequency):
     ax.grid(False)
 
     ax.set_ylabel('Vertical Range (m)')
-    if not upward:  # plot depth increasing down the y-axis
-        ax.invert_yaxis()
     x_fmt = mdates.DateFormatter('%b-%d')
     ax.xaxis.set_major_formatter(x_fmt)
     ax.set_xlabel('')
@@ -257,15 +253,15 @@ def generate_echogram(data, site, long_name, deployed_depth, output_directory, f
         v_min = colorbar_range[0]
         v_max = colorbar_range[1]
 
-    # if upward looking, increase y-axis from bottom to top, otherwise increase from the top to the bottom
-    if site in ['GP02HYPM_Lower', 'GI02HYPM_Lower']:
+    # determine if this is an upward or downward looking sensor
+    if 'LOWER' in site:
         upward = False
     else:
         upward = True
 
     # initialize the echogram figure and set the title
     fig, ax = plt.subplots(nrows=len(frequency_list), sharex='all', sharey='all')
-    ht = fig.suptitle('{} ({})\n{} to {} UTC\n{} m nominal deployment depth'.format(long_name, site, start_date,
+    ht = fig.suptitle('{} ({})\n{} to {} UTC\n{} m nominal deployment depth'.format(long_name, site[:8], start_date,
                                                                                     stop_date, deployed_depth))
     ht.set_horizontalalignment('left')
     ht.set_position([0.301, 0.94])  # position title to the left
@@ -275,11 +271,16 @@ def generate_echogram(data, site, long_name, deployed_depth, output_directory, f
     for index in range(len(frequency_list)):
         im.append(data.isel(frequency=index).Sv.plot(x='ping_time', y='range', vmin=v_min, vmax=v_max, ax=ax[index],
                                                      cmap=my_cmap, add_colorbar=False))
-        ax_config(ax[index], upward, frequency_list[index])
+        ax_config(ax[index], frequency_list[index])
 
     # set a common x- and y-axis, label the x-axis and create space for a shared colorbar
     ax[0].set_xlim([date.fromisoformat(start_date), date.fromisoformat(stop_date)])
-    ax[0].set_ylim([y_min, y_max])
+    # if upward looking, increase y-axis from bottom to top, otherwise increase from the top to the bottom
+    if upward:
+        ax[0].set_ylim([y_min, y_max])
+    else:
+        ax[0].set_ylim([y_max, y_min])
+
     fig.subplots_adjust(right=0.89)
     cbar = fig.add_axes([0.91, 0.30, 0.012, 0.40])
     fig.colorbar(im[0], cax=cbar, label='Sv (dB)')
@@ -562,7 +563,7 @@ def main(argv=None):
         if vertical_range is None:
             vertical_range = site_config[site]['vertical_range']
     elif site is not None:
-        raise parser.error('Site not found')
+        raise parser.error('The site name was not found in the configuration dictionary.')
 
     # make sure the root output directory exists
     if not os.path.isdir(output_directory):
@@ -615,9 +616,15 @@ def main(argv=None):
     # save the daily files
     xr.save_mfdataset(datasets, nc_files, mode='w', format='NETCDF4', engine='h5netcdf')
 
-    # resample the data into a 15 minute, median averaged record
-    avg = data.resample(ping_time='15Min').median()
-    avg = avg.interpolate_na(dim='ping_time', max_gap='45Min')
+    # if a global mooring, create hourly averaged data records, otherwise create 15 minute records
+    if 'HYPM' in site:
+        # resample the data into a 60 minute, median averaged record, filling gaps less than 180 minutes
+        avg = data.resample(ping_time='60Min').mean()
+        avg = avg.interpolate_na(dim='ping_time', max_gap='180Min')
+    else:
+        # resample the data into a 15 minute, median averaged record, filling gaps less than 45 minutes
+        avg = data.resample(ping_time='15Min').median()
+        avg = avg.interpolate_na(dim='ping_time', max_gap='45Min')
 
     # generate the echogram
     long_name = site_config[site]['long_name']
@@ -627,15 +634,16 @@ def main(argv=None):
     # add the OOI logo as a watermark
     echogram = os.path.join(output_directory, file_name + '.png')
     echo_image = Image.open(echogram)
-    ooi_image = Image.open('./zpls_echograms/ooi-logo.png')
+    ooi_image = Image.open('ooi-logo.png')
     width, height = echo_image.size
     transparent = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     transparent.paste(echo_image, (0, 0))
-    if zpls_model == 'AZFP':
-        transparent.paste(ooi_image, (80, 15), mask=ooi_image)
+    if max(vertical_range) > 99:
+        transparent.paste(ooi_image, (96, 15), mask=ooi_image)
     else:
-        transparent.paste(ooi_image, (95, 15), mask=ooi_image)
+        transparent.paste(ooi_image, (80, 15), mask=ooi_image)
 
+    # re-save the echogram with the added logo
     transparent.save(echogram)
 
     # save the averaged data
@@ -644,7 +652,6 @@ def main(argv=None):
     for v in avg.variables:
         avg[v].attrs = attributes[v]
 
-    # save the averaged record
     avg_file = nc_file + '_Averaged.nc'
     avg.to_netcdf(avg_file, mode='w', format='NETCDF4', engine='h5netcdf')
 
