@@ -74,15 +74,15 @@ site_config = {
         'long_name': 'Coastal Pioneer, Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 90],
-        'deployed_depth': 90
+        'vertical_range': [0, 95],
+        'deployed_depth': 95
     },
     'CP01CNSM': {
         'long_name': 'Coastal Pioneer, Central Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 130],
-        'deployed_depth': 130
+        'vertical_range': [0, 135],
+        'deployed_depth': 135
     },
     'GI02HYPM_UPPER': {
         'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Upward Looking',
