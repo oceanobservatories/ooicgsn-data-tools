@@ -5,7 +5,7 @@ Author: J. Kuo, jkuo@whoi.edu; S. Petillo, spetillo@whoi.edu; C. Wingard, chris.
 
 **Description**
 
-Utilizes the open-source ocean sonar data processing module [echopype](https://echopype.readthedocs.io/en/latest/) to
+Utilizes [echopype](https://echopype.readthedocs.io/en/latest/), the open-source ocean sonar data processing module, to
 process OOI bioacoustic sonar data from both uncabled and cabled array sensors and generate weekly echograms that 
 the user community can use to quickly assess the quality and applicability of the data to their research needs.
 
@@ -15,17 +15,16 @@ for most uncabled sites (e.g. [CP03ISSM](https://oceanobservatories.org/site/cp0
 ([CE04OSPS](https://oceanobservatories.org/site/ce04osps/) and [CE02SHBP](https://oceanobservatories.org/site/ce02shbp/)),
 OOI uses the [Kongsberg Maritime Simrad EK60 Echo Sounder](https://www.kongsberg.com/maritime/products/mapping-systems/fishery-research/es_scientific/simrad-ek60/). 
 Echopype can be used to convert and process data from both sensor types, allowing the generation of a common set of
-echograms and processed files for users to further utilize.
+echograms and processed files.
 
 **Setup:**  
 
 1. Install [Anaconda](https://www.anaconda.com/products/individual) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
    to manage Python-related packages and package versions.
 
-2. Create the conda environment, then install the conda environment to run with this code and its echopype dependencies
-   (instead of using pip).
+2. Create the conda environment to run with this code.
 
-```conda create env -f environment.yml```
+```conda env create --file environment.yml```
 
 3. Activate the Conda environment
 
