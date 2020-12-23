@@ -1,0 +1,43 @@
+name: echopype
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.7
+  - pip
+  - black
+  - bottleneck
+  - check-manifest
+  - cmocean
+  - dask[array]
+  - flake8
+  - flake8-builtins
+  - flake8-comprehensions
+  - flake8-mutable
+  - flake8-print
+  - isort
+  - h5py
+  - h5netcdf
+  - matplotlib
+  - mypy
+  - netCDF4
+  - numpy
+  - numpydoc
+  - pillow
+  - pre-commit
+  - pylint
+  - pytest
+  - pynmea2
+  - pytest-cov
+  - pytest-flake8
+  - pytest-xdist
+  - pytz
+  - scipy
+  - setuptools_scm
+  - sphinx
+  - sphinx-automodapi
+  - twine
+  - wheel
+  - xarray
+  - zarr
+
