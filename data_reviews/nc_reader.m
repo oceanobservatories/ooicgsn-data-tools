@@ -49,7 +49,8 @@ for k = 1:numel(varNames)
         continue
     end %if
     % read the variable from the NetCDF file
-    data = ncread(filename, varNames{k});
+    %data = ncread(filename, varNames{k});
+    data = h5read(filename, "/" + varNames{k});
     if ~isempty(vAttributes{k})
         attr = struct2table(vAttributes{k});
         units = {''}; descr = {''};
