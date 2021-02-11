@@ -67,48 +67,74 @@ site_config = {
         'long_name': 'Coastal Pioneer, Offshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 450],
+        'vertical_range': [0, 460],
         'deployed_depth': 450
     },
     'CP03ISSM': {
         'long_name': 'Coastal Pioneer, Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 95],
+        'vertical_range': [0, 100],
         'deployed_depth': 95
     },
     'CP01CNSM': {
         'long_name': 'Coastal Pioneer, Central Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 135],
+        'vertical_range': [0, 140],
         'deployed_depth': 135
     },
     'GI02HYPM_UPPER': {
         'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
+        'vertical_range': [0, 200],
         'deployed_depth': 150
     },
     'GI02HYPM_LOWER': {
         'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
+        'vertical_range': [0, 400],
         'deployed_depth': 150
     },
     'GP02HYPM_UPPER': {
         'long_name': 'Global Station Papa, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
+        'vertical_range': [0, 200],
         'deployed_depth': 150},
     'GP02HYPM_LOWER': {
         'long_name': 'Global Station Papa, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
+        'vertical_range': [0, 400],
+        'deployed_depth': 150
+    },
+    'GA02HYPM_UPPER': {
+        'long_name': 'Global Argentine Basin, Apex Profiler Mooring, Upward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 200],
+        'deployed_depth': 150},
+    'GA02HYPM_LOWER': {
+        'long_name': 'Global Argentine Basin, Apex Profiler Mooring, Downward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 400],
+        'deployed_depth': 150
+    },
+    'GS02HYPM_UPPER': {
+        'long_name': 'Global Southern Ocean, Apex Profiler Mooring, Upward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 200],
+        'deployed_depth': 150},
+    'GS02HYPM_LOWER': {
+        'long_name': 'Global Southern Ocean, Apex Profiler Mooring, Downward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 400],
         'deployed_depth': 150
     }
 }
