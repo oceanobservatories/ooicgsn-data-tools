@@ -26,90 +26,136 @@ site_config = {
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 25],
-        'deployed_depth': 25
+        'deployed_depth': 25,
+        'instrument_orientation': 'up'
     },
     'CE02SHBP': {
         'long_name': 'Coastal Endurance, Oregon Shelf Cabled Benthic Experiment Package',
         'tilt_correction': 0,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 80],
-        'deployed_depth': 80
+        'deployed_depth': 80,
+        'instrument_orientation': 'up'
     },
     'CE04OSPS': {
         'long_name': 'Coastal Endurance, Oregon Offshore Cabled Shallow Profiler Mooring',
         'tilt_correction': 0,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 200],
-        'deployed_depth': 200
+        'deployed_depth': 200,
+        'instrument_orientation': 'up'
     },
     'CE06ISSM': {
         'long_name': 'Coastal Endurance, Washington Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 30],
-        'deployed_depth': 29
+        'deployed_depth': 29,
+        'instrument_orientation': 'up'
     },
     'CE07SHSM': {
         'long_name': 'Coastal Endurance, Washington Shelf Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 87],
-        'deployed_depth': 87
+        'deployed_depth': 87,
+        'instrument_orientation': 'up'
     },
     'CE09OSSM': {
         'long_name': 'Coastal Endurance, Washington Offshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
         'vertical_range': [0, 540],
-        'deployed_depth': 542
+        'deployed_depth': 542,
+        'instrument_orientation': 'up'
     },
     'CP04OSSM': {
         'long_name': 'Coastal Pioneer, Offshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 450],
-        'deployed_depth': 450
+        'vertical_range': [0, 460],
+        'deployed_depth': 450,
+        'instrument_orientation': 'up'
     },
     'CP03ISSM': {
         'long_name': 'Coastal Pioneer, Inshore Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 95],
-        'deployed_depth': 95
+        'vertical_range': [0, 100],
+        'deployed_depth': 95,
+        'instrument_orientation': 'up'
     },
     'CP01CNSM': {
         'long_name': 'Coastal Pioneer, Central Surface Mooring',
         'tilt_correction': 15,
         'colorbar_range': [-90, -50],
-        'vertical_range': [0, 135],
-        'deployed_depth': 135
+        'vertical_range': [0, 140],
+        'deployed_depth': 135,
+        'instrument_orientation': 'up'
     },
     'GI02HYPM_UPPER': {
         'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
-        'deployed_depth': 150
+        'vertical_range': [0, 200],
+        'deployed_depth': 150,
+        'instrument_orientation': 'up'
     },
     'GI02HYPM_LOWER': {
         'long_name': 'Global Irminger Sea, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
-        'deployed_depth': 150
+        'vertical_range': [0, 400],
+        'deployed_depth': 150,
+        'instrument_orientation': 'down'
     },
     'GP02HYPM_UPPER': {
         'long_name': 'Global Station Papa, Apex Profiler Mooring, Upward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
-        'deployed_depth': 150},
+        'vertical_range': [0, 200],
+        'deployed_depth': 150,
+        'instrument_orientation': 'up'
+    },
     'GP02HYPM_LOWER': {
         'long_name': 'Global Station Papa, Apex Profiler Mooring, Downward Looking',
         'tilt_correction': 15,
         'colorbar_range': [-95, -65],
-        'vertical_range': [0, 150],
-        'deployed_depth': 150
+        'vertical_range': [0, 400],
+        'deployed_depth': 150,
+        'instrument_orientation': 'down'
+    },
+    'GA02HYPM_UPPER': {
+        'long_name': 'Global Argentine Basin, Apex Profiler Mooring, Upward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 200],
+        'deployed_depth': 150,
+        'instrument_orientation': 'up'
+    },
+    'GA02HYPM_LOWER': {
+        'long_name': 'Global Argentine Basin, Apex Profiler Mooring, Downward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 400],
+        'deployed_depth': 150,
+        'instrument_orientation': 'down'
+    },
+    'GS02HYPM_UPPER': {
+        'long_name': 'Global Southern Ocean, Apex Profiler Mooring, Upward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 200],
+        'deployed_depth': 150,
+        'instrument_orientation': 'up'
+    },
+    'GS02HYPM_LOWER': {
+        'long_name': 'Global Southern Ocean, Apex Profiler Mooring, Downward Looking',
+        'tilt_correction': 15,
+        'colorbar_range': [-95, -65],
+        'vertical_range': [0, 400],
+        'deployed_depth': 150,
+        'instrument_orientation': 'down'
     }
 }
 
@@ -610,6 +656,8 @@ def main(argv=None):
     for dataset in datasets:
         dataset['ping_time'] = dataset['ping_time'].values.astype(np.float64) / 10.0 ** 9
         dataset.attrs = attributes['global']
+        dataset.attrs['instrument_orientation'] = site_config[site]['instrument_orientation']
+
         for v in dataset.variables:
             dataset[v].attrs = attributes[v]
 
@@ -649,6 +697,7 @@ def main(argv=None):
     # save the averaged data
     avg['ping_time'] = avg['ping_time'].values.astype(np.float64) / 10.0 ** 9
     avg.attrs = attributes['global']
+    avg.attrs['instrument_orientation'] = site_config[site]['instrument_orientation']
     for v in avg.variables:
         avg[v].attrs = attributes[v]
 
