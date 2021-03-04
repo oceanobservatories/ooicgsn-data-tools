@@ -5,15 +5,15 @@ function t = nc_reader(filename)
 % https://www.mathworks.com/help/parallel-computing/examples/process-big-data-in-the-cloud.html
 
 % Get information about the NetCDF data file
-fileInfo = ncinfo(filename);
+fileInfo = h5info(filename);
 
 % Extract the global and variable level attributes -- note, Matlab doesn't
 % really support these very well, so their utility is limited.
 %gAttributes = struct2table(fileInfo.Attributes);
-vAttributes = {fileInfo.Variables.Attributes};
+vAttributes = {fileInfo.Datasets.Attributes};
 
 % Extract the variable names
-varNames = string({fileInfo.Variables.Name});
+varNames = string({fileInfo.Datasets.Name});
 
 % test for presence of a variable called time
 i = 1; test = 0;
@@ -28,14 +28,15 @@ clear i test
 
 % Create the datetime axis from the time variable (OMS++ uses 1970 and OOI
 % uses 1900 as their pivot years).
-nc_time = ncread(filename, 'time');   % obtain the time record
+nc_time = h5read(filename, '/time');   % obtain the time record
 test = nc_time(1) / 60 / 60 / 24 + datenum(1970, 1, 1, 0, 0, 0);
 if test > now
-    nc_time = nc_time / 60 / 60 / 24 + datenum(1900, 1, 1, 0, 0, 0);
+    dt = datetime(1900, 1, 1, 'Format', 'dd-MMM-yyyy HH:mm:ss', ...
+        'TimeZone', 'UTC') + seconds(nc_time);
 else 
-    nc_time = nc_time / 60 / 60 / 24 + datenum(1970, 1, 1, 0, 0, 0);
+    dt = datetime(1970, 1, 1, 'Format', 'dd-MMM-yyyy HH:mm:ss', ...
+        'TimeZone', 'UTC') + seconds(nc_time);
 end %if
-dt = datetime(nc_time, 'ConvertFrom', 'datenum', 'TimeZone', 'UTC');
 rowlength = length(dt);
 clear test nc_time
 
@@ -49,9 +50,8 @@ for k = 1:numel(varNames)
         continue
     end %if
     % read the variable from the NetCDF file
-    %data = ncread(filename, varNames{k});
-    data = h5read(filename, "/" + varNames{k});
-    
+    data = squeeze(h5read(filename, "/" + varNames{k}));
+    % pull out the variable units and comment attributes
     if ~isempty(vAttributes{k})
         attr = struct2table(vAttributes{k});
         units = {''}; descr = {''};
@@ -64,17 +64,26 @@ for k = 1:numel(varNames)
             end %if
         end %for
     end %if
-    [r, c] = size(data);    % check the dimensions
+    % add the variable and attributes to the time table
+    [r, c] = size(data);    % check the dimensions 
     if r == rowlength
         % if the number of rows == the number of RowTimes, add the variable
         % without modification.
-        t = addvars(t, data, 'NewVariableNames', varNames{k});
+        if strcmp(fileInfo.Datasets(k).Datatype.Class, 'H5T_STRING')
+            t = addvars(t, cell2mat(data), 'NewVariableNames', varNames{k});
+        else
+            t = addvars(t, data, 'NewVariableNames', varNames{k});
+        end %if
         t.Properties.VariableUnits{varNames{k}} = units{:};
         t.Properties.VariableDescriptions{varNames{k}} = descr{:};
     elseif c == rowlength
         % if the number of columns equals the RowTimes, rotate the variable
         % before adding it so the row length matches the RowTimes
-        t = addvars(t, data', 'NewVariableNames', varNames{k});
+        if strcmp(fileInfo.Datasets(k).Datatype.Class, 'H5T_STRING')
+            t = addvars(t, cell2mat(data'), 'NewVariableNames', varNames{k});
+        else
+            t = addvars(t, data', 'NewVariableNames', varNames{k});
+        end %if
         t.Properties.VariableUnits{varNames{k}} = units{:};
         t.Properties.VariableDescriptions{varNames{k}} = descr{:};
     elseif r == 1 && c == 1
