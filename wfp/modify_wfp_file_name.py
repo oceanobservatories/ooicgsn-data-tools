@@ -1,5 +1,5 @@
 """
-This script modifies MMP file names downloaded from the Subsurface Mooring controller 
+This script modifies WFP file names downloaded from the Subsurface Mooring controller 
 in order to be unpacked by the McLane official unpacker. It removes the inductive ID 
 number and replaces the file extension to .DAT
 """
