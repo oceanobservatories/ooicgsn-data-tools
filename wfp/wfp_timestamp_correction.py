@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 This script adds 80 years to 1940 in the raw hex data to correct the time bug.
 """
