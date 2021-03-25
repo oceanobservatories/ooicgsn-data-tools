@@ -1,6 +1,28 @@
 #!/usr/bin/env python
 """
-This script adds 80 years to 1940 in the raw hex data to correct the time bug.
+This script is tailored to Irminger 6 Wire-Following Profiler recovered data only!!
+
+Irminger 6 Wire-Following Profiler recovered data required a correction to the timestamps in the 
+raw data due to a bug in firmware version 5.34. This bug caused the profiler to record timestamps 
+with year 1940 beginning after the transition from 2019 to 2020.  McLane recommends that 80 years 
+be added to the year in all timestamps recorded after 2020-01-01T00:00:00 to correct the timestamp 
+in the raw data (1940 + 80 = 2020).
+
+process_a_file iterates through A-files starting from profile 178 (where the time bug began),
+and add 80 to the year with value less than 2018. This function only goes through the hex 
+string field acm_stop_time.
+
+process_c_file iterates through C-files and add 80 to the year with value less than 2018.
+This function does the time correction in the following hex string fields: start_time, stop_time.
+
+process_e_file iterates through E-files and add 80 to the year with value less than 2018.
+This function does the time correction in the following hex string fields: timestamp, 
+sensor_start_time, sensor_end_time, vehicle_start_time, vehicle_end_time.
+
+process_m_file iterates through M-files and add 80 to the year with value less than 2018. 
+This function does the time correction in the following hex string fields: timestamps,
+motion_start_time, motion_stop_time.
+
 """
 
 from struct import *
