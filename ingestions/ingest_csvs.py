@@ -34,7 +34,7 @@ PRIORITY = 1
 BASE_URL = 'https://ooinet-west.oceanobservatories.org'
 DEPLOY_URL = '12587/events/deployment/inv/'
 credentials = netrc.netrc()
-API_KEY, USERNAME, API_TOKEN = credentials.authenticators('ooinet.oceanobservatories.org')
+API_KEY, USERNAME, API_TOKEN = credentials.authenticators('ooinet-west.oceanobservatories.org')
 
 # setup constants used to access the data from the different M2M interfaces
 SESSION = requests.Session()
@@ -325,6 +325,7 @@ def main(argv=None):
             # visually review and confirm the request, and post if correct
             if default_review:
                 r = ingest_data(BASE_URL, API_KEY, API_TOKEN, ingest_dict)
+
             else:
                 pp.pprint(ingest_dict)
                 review = input('Review ingest request. Is this correct? <y>/n: ') or 'y'
@@ -336,7 +337,7 @@ def main(argv=None):
                     continue
 
             # add the ingest results to the data frame if a successful request was made
-            if r.status_code == requests.codes.ok:
+            if r.status_code == requests.codes.created:
                 ingest_json = r.json()
                 tdf = pd.DataFrame([ingest_json], columns=list(ingest_json.keys()))
                 tdf['ReferenceDesignator'] = row[1]['refDes']
