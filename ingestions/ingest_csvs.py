@@ -381,8 +381,8 @@ def main(argv=None):
     parser.add_argument("--debug", dest="debug", default=False,
                         action="store_true",
                         help="A dry run that prints the final json "
-                            "ingest request instead of actually submitting "
-                            " to the api for debugging purposes.")
+                             "ingest request instead of actually submitting "
+                             " to the api for debugging purposes.")
     parser.add_argument("-am", "--use_am_dates", dest="am_dates", default=False,
                         action='store_true', help="Use Asset Management to set start and end dates")
     parser.add_argument("-bd", "--begin_date", dest="begin_date", type=str,
@@ -395,9 +395,9 @@ def main(argv=None):
     parser.add_argument("-u", "--user", dest="netrcaccount", type=str,
                         default=PROD_DOMAIN,
                         help= """The user netrnc "machine" name to use 
-        for authentication.  Either the full machine name or the 
-        username when the .netrc machine name is formatted as 
-        username@domain""")
+                              for authentication.  Either the full machine
+                              name or the username when the .netrc machine
+                              name is formatted as username@domain""")
 
     # parse the input arguments and create a parser object
     args = parser.parse_args(argv)
