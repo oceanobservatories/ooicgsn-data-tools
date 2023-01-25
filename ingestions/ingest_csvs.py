@@ -492,7 +492,7 @@ def main(argv=None):
                     tdf['priority'] = row[1]['priority']
                     tdf['refDesFinal'] = row[1]['refDesFinal']
                     tdf['fileMask'] = row[1]['fileMask']
-                    ingest_df = ingest_df.append(tdf)
+                    ingest_df = pd.concat([ingest_df, tdf])
                 else:
                     print('Request failed with status code {}'.format(r.status_code))
                     print(r.json())
