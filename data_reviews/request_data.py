@@ -10,7 +10,7 @@ import getopt
 import os
 import sys
 
-from  ooi_data_explorations.common import m2m_request, m2m_collect
+from  ooi_data_explorations.common import m2m_request, m2m_collect, dt64_epoch
 
 def request_data(site, node, sensor, method, stream, start, stop):
     """
@@ -30,7 +30,8 @@ def request_data(site, node, sensor, method, stream, start, stop):
 
     # Use a regex tag to download the sensor data from the THREDDS catalog
     # created by our request.
-    tag = ('.*{}.*\\.nc$'.format(sensor[3:8]))
+    #tag = ('.*{}.*\\.nc$'.format(sensor[3:8]))
+    tag = ('.*{}.*\\.nc$'.format(stream))
     data = m2m_collect(r, tag)
     return data
 
@@ -63,6 +64,16 @@ def main(argv):
 
     # request the data
     data = request_data(site, node, sensor, method, stream, start, stop)
+    
+    # sort by the deployment number and then time
+    data = data.sortby(['deployment', 'time'])
+
+    # reset the time record to seconds since 1970 and update the attributes
+    data['time'] = dt64_epoch(data.time)
+    data.time.attrs['long_name'] = 'Time'
+    data.time.attrs['standard_name'] = 'time'
+    data.time.attrs['units'] = 'seconds since 1970-01-01 00:00:00 0:00'
+    data.time.attrs['calendar'] = 'gregorian'    
 
     # save the data to disk
     nc_out = os.path.abspath(filename)
